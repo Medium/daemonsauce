@@ -70,11 +70,11 @@ the foreground for development).
 A lockfile is used to ensure that only one instance of a daemon is
 running at any given time.
 
-In this case, the lockfile is named `*product-name*.pid` and placed in
+In this case, the lockfile is named `product-name.pid` and placed in
 the specified run directory. During startup, if it turns out that
 another process has locked the lockfile (this uses the POSIX call
 `lockf()`), this will cause the new process to exit.
 
 If the lock is successful, then the "winning" process writes out its
 process id to the lockfile, which makes it convenient to inspect,
-e.g. by `cat *product-name*.pid` from a console.
+e.g. by `cat product-name.pid` from a console.
