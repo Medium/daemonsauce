@@ -9,14 +9,12 @@
         "url": "http://www.milk.com/"
     },
     "private": true,
+
+    "main": "lib/index.js",
 	
     "dependencies": {
         "daemon": "~0.4.1",
         "posix": "~0.0.6"
-    },
-
-    "directories": {
-        "lib": "lib"
     },
 
     "engine": {
