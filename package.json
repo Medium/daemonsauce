@@ -1,9 +1,25 @@
 {
     "name": "daemonsauce",
     "version": "0.1.0",
+    "description": "Just add Daemon Sauce to make yourself a daemon."
+    "keywords": ["daemon"],
+    "author": {
+        "name": "Dan Bornstein",
+        "email": "danfuzz@milk.com",
+        "url": "http://www.milk.com/"
+    },
     "private": true,
+	
     "dependencies": {
         "daemon": "~0.4.1",
         "posix": "~0.0.6"
+    },
+
+    "directories": {
+        "lib": "lib"
+    },
+
+    "engine": {
+        "node": "~0.6.0"
     }
 }
