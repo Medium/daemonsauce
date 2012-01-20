@@ -1,7 +1,7 @@
 {
     "name": "daemonsauce",
     "version": "0.1.0",
-    "description": "Just add Daemon Sauce to make yourself a daemon."
+    "description": "Just add Daemon Sauce to make yourself a daemon.",
     "keywords": ["daemon"],
     "author": {
         "name": "Dan Bornstein",
