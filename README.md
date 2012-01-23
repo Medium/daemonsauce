@@ -55,7 +55,7 @@ Logging Details
 This section only applies when running as a daemon (as opposed to in
 the foreground for development).
 
-Once setup, `console.log()` and most of the other standard logging
+Once set up, `console.log()` and most of the other standard logging
 functions will write to a file called `error.log` in the specified
 logging directory. The one exception is that `console.info()` will
 emit a log message to the syslog. (You can find the syslog in the
@@ -79,3 +79,9 @@ another process has locked the lockfile (this uses the POSIX call
 If the lock is successful, then the "winning" process writes out its
 process id to the lockfile, which makes it convenient to inspect,
 e.g. by `cat product-name.pid` from a console.
+
+Using Upstart
+-------------
+
+The file `upstart.conf` in the example directory is a simple example
+of how one might hook up a service that uses Daemon Sauce.
