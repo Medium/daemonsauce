@@ -2,7 +2,7 @@
     "name": "daemonsauce",
     "version": "0.1.0",
     "description": "Just add Daemon Sauce to make yourself a daemon.",
-    "keywords": ["daemon"],
+    "keywords": ["daemon", "init", "upstart"],
     "author": {
         "name": "Dan Bornstein",
         "email": "danfuzz@milk.com",

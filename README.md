@@ -2,7 +2,8 @@ Daemon Sauce
 ============
 
 Just add Daemon Sauce to your Node project, to make it a proper *nix
-daemon.
+daemon. This is intended to help build daemons that play nice on machines
+with services managed by something like (traditional) init(8) or Upstart.
 
 The main things that this module does:
 
