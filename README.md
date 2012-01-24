@@ -31,10 +31,10 @@ Here's an example:
 
     var argv = daemonsauce.basicSetup();
 
-    argv = optimist
+    argv = optimist(argv.slice(2))
         .demand(["product-name", "log-dir", "run-dir"])
         .string(["product-name", "log-dir", "run-dir"])
-        .parse(argv.slice(2));
+        .argv;
 
     daemonsauce.usualSetup(
         argv["product-name"], argv["log-dir"], argv["run-dir"]);
