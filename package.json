@@ -14,7 +14,7 @@
 	
     "dependencies": {
         "daemon": "~0.4.1",
-        "posix": "~0.0.6"
+        "posix": "~0.0.7"
     },
 
     "engine": {
