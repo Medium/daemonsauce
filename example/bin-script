@@ -1,0 +1,153 @@
+#!/usr/bin/env node
+
+// Copyright 2012 The Obvious Corporation.
+
+/*
+ * Daemon run script. See the daemonsauce README file for info about
+ * using this.
+ */
+
+
+/*
+ * Modules used
+ */
+
+"use strict";
+
+var fs   = require("fs");
+var path = require("path");
+
+
+/*
+ * Variable setup
+ */
+
+/**
+ * the base name of this script; the main code lives in a parallel
+ * directory with this name
+ */
+var scriptName = path.basename(__filename);
+
+/**
+ * the base directory for this installation. This is one layer up from
+ * the directory that this script is in, because this script is
+ * sitting in a bin/ directory under the base.
+ */
+var baseDir = path.dirname(__dirname);
+
+/** the main code directory */
+var codeDir = path.join(baseDir, scriptName);
+
+/**
+ * the associated data directory. In the case of a local (per-user)
+ * installation (including inside builds), this is just "data/" under
+ * the base. In the case of system installation -- keyed off the fact
+ * that the base directory starts with "/usr" -- this is a parallel
+ * "/var" directory.
+ */
+var dataDir;
+
+if (baseDir.search(/^\/usr\//) === 0) {
+    // System installation.
+    dataDir = "/var/" + baseDir.slice(5);
+} else {
+    // Local installation.
+    dataDir = baseDir + "/data";
+}
+
+/** the log directory */
+var logDir = dataDir;
+
+/** the run (process id / lock file) directory */
+var runDir = dataDir;
+
+/** product name (from package.json) */
+var productName;
+
+/** product version (from package.json) */
+var productVersion;
+
+/** privileged script name (from package.json) */
+var rootMain;
+
+/** desired userid (from package.json; defaults to the product name */
+var daemonUser;
+
+/** desired groupid (from package.json; defaults to the product name */
+var daemonGroup;
+
+setFromPackageJson();
+
+
+/*
+ * Helper functions
+ */
+
+/**
+ * Set the various variables based on the code directory's package.json.
+ */
+function setFromPackageJson() {
+    var packageFile = fs.readFileSync(path.join(codeDir, "package.json"));
+    var info = JSON.parse(packageFile);
+
+    productName = info.name;
+    productVersion = info.version;
+    rootMain = info.rootMain;
+    daemonUser = info.daemonUser;
+    daemonGroup = info.daemonGroup;
+
+    if (!productName) {
+        throw new Error("Missing name definition in package.json");
+    }
+
+    if (!productVersion) {
+        throw new Error("Missing version definition in package.json");
+    }
+}
+
+
+/*
+ * Main script
+ */
+
+// We rely on daemonsauce being named as a dependency in the app, but
+// we only know after variable setup where that app is, so we can't
+// just do a normal require() at the top of the file.
+var daemonsauce = require(path.join(codeDir, "node_modules", "daemonsauce"));
+
+// Early daemon setup. This call may result in the rest of this script
+// not running, because the script args indicate that the current process
+// is to be the daemon parent.
+daemonsauce.basicSetup();
+
+// This is the last opportunity to run something as the root user. If the
+// program specified a "rootMain" now's when it gets to run.
+
+if (rootMain) {
+    require(path.join(codeDir, rootMain));   
+}
+
+// Do the remainder of the daemon setup.
+
+var info = {
+    name:    productName,
+    version: productVersion,
+    user:    daemonUser,
+    group:   daemonGroup,
+    baseDir: baseDir,
+    dataDir: dataDir,
+    logDir:  logDir,
+    runDir:  runDir
+};
+
+daemonsauce.usualSetup(info);
+
+// Announce
+console.log("Running service: %s v%s", productName, productVersion);
+console.log("Base directory: %s", baseDir);
+console.log("Data directory: %s", dataDir);
+console.log("Log directory: %s", logDir);
+console.log("Run directory: %s", runDir);
+
+// Run the main code.
+require(codeDir);
