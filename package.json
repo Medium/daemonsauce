@@ -1,6 +1,6 @@
 {
     "name": "daemonsauce",
-    "version": "0.1.1",
+    "version": "0.2.0",
     "description": "Just add Daemon Sauce to make yourself a daemon.",
     "keywords": ["daemon", "init", "upstart"],
     "author": {
