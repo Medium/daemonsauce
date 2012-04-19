@@ -13,12 +13,20 @@ The main things that this module does:
 * Setting user and group ids to drop privileges (when running as root).
 
 
-Installation
-------------
+Building and Installation
+-------------------------
 
-    npm install daemonsauce
+Assuming this gets published as open source:
 
-or include it in your `package.json` file.
+```shell
+npm install daemonsauce
+```
+
+Or grab the source and:
+
+```shell
+node-waf configure build
+```
 
 
 Usage
