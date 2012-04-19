@@ -85,7 +85,7 @@ Handle<Value> AcquireLock(const Arguments& args) {
 
     String::Utf8Value data(name);
   
-    int lockFd = open(*data, O_RDWR | O_CREAT | O_TRUNC, 0640);
+    int lockFd = open(*data, O_RDWR | O_CREAT, 0640);
     if (lockFd < 0) {
         return scheduleException("Failed to open lock file");
     }
@@ -104,6 +104,7 @@ Handle<Value> AcquireLock(const Arguments& args) {
     }
 
     write(lockFd, pidStr, pidLen);
+    ftruncate(lockFd, pidLen);
     fsync(lockFd);
   
     return True();
