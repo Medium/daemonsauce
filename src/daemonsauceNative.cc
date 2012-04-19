@@ -50,8 +50,11 @@ Handle<Value> ReopenStdout(const Arguments& args) {
     syslog(LOG_NOTICE, "~~~ hrm %s", *data);
 
     if (freopen(*data, "a", stdout) == NULL) {
+        syslog(LOG_NOTICE, "~~~ oy! hrm %s", *data);
         return scheduleException("Failed to reopen stdout.");
     }
+
+    syslog(LOG_NOTICE, "~~~ yay! hrm %s", *data);
 
     return Undefined();
 }
