@@ -9,6 +9,7 @@
 
 // ~~~ debugging
 #include <syslog.h>
+#include <errno.h>
 
 using namespace v8;
 
