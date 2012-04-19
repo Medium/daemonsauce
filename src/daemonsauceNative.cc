@@ -7,6 +7,9 @@
 #include <stdio.h>
 #include <unistd.h>
 
+// ~~~ debugging
+#include <syslog.h>
+
 using namespace v8;
 
 #define DEV_NULL "/dev/null"
@@ -42,6 +45,9 @@ Handle<Value> ReopenStdout(const Arguments& args) {
     }
 
     String::Utf8Value data(name);
+
+    // ~~~ debugging
+    syslog(LOG_NOTICE, "~~~ hrm %s", *data);
 
     if (freopen(*data, "a", stdout) == NULL) {
         return scheduleException("Failed to reopen stdout.");
