@@ -48,6 +48,7 @@ Handle<Value> ReopenStdout(const Arguments& args) {
 
     // ~~~ debugging
     syslog(LOG_NOTICE, "~~~ hrm %s", *data);
+    errno = 0;
 
     if (freopen(*data, "a", stdout) == NULL) {
         syslog(LOG_NOTICE, "~~~ oy! hrm %s", *data);
