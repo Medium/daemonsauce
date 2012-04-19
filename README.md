@@ -16,17 +16,28 @@ The main things that this module does:
 Building and Installation
 -------------------------
 
-Assuming this gets published as open source:
-
 ```shell
 npm install daemonsauce
 ```
 
-Or grab the source and:
+Or grab the source and
 
 ```shell
 node-waf configure build
 ```
+
+
+Testing
+-------
+
+It is unfortunately not easy to put together a generic automated test
+for the functionality in this module, such that it can be expected to
+work in the wide range of environments in which it is potentially
+deployed. In practice, this module has been tested by a lot of trial
+and error, along with a fair amount of one-off poking and prodding.
+
+The author would love some input (where "input" means "Pull requests,
+please!") on how to remedy this situation.
 
 
 Usage
@@ -63,18 +74,39 @@ properties that can be defined in your `package.json` file:
   application as. If unset, it defaults to the userid.
 
 If you want to make life hard on yourself, there are also separate
-methods to handle the various bits and pieces. UTSL for details.
+methods to handle most of the various bits and pieces. UTSL for
+details.
 
 The one requirement for your commandline arguments is that you pass in
-a `--daemon` argument to kick things off. When running
-normally (that is, to cause it to create a real daemon), pass
-`--daemon=parent`. When running in a development environment,
-pass `--daemon=foreground` to cause the process to remain an attached
-foreground process (and not mess with log or lock files, either).
+a `--daemon` argument to kick things off. When running normally (that
+is, to cause it to create a real daemon in the usual fork/detach
+style), pass `--daemon=parent`. When running in a development
+environment, pass `--daemon=foreground` to cause the process to remain
+an attached foreground process (and not mess with log or lock files,
+either). If you are trying to debug what happens as the child process
+starts, make yourself a root shell (e.g., `sudo su`), and try running
+the daemon with `--daemon=child`. In the last case, note that the
+system will close and/or redirect stdio pretty early.
 
 You should expect to see `--daemon=child` in the arguments to your
 application when it is running "for real" (as opposed to in one of
 the set-up phases).
+
+
+Directory Setup Details
+-----------------------
+
+The suggested/example `bin-script` file assumes that a "normal"
+installation of a daemon is done in `/usr/...`, with associated data
+in `/var/...` (where the `...`s are the same). When you install a
+daemon, it is probably a good idea to create that `/var` directory at
+the same time, assigning it a user and group that match the product
+name or explicit `daemonUser` / `daemonGroup`, as appropriate.
+
+If the daemon is run from a directory that's not under `/usr`, it
+assumes it is in a development environment, and instead of looking for
+a `var/...` directory, it assumes that the data lives in a `data`
+subdirectory of the installation.
 
 
 Logging Details
@@ -88,7 +120,12 @@ functions will write to a file called `error.log` in the specified
 logging directory. The one exception is that `console.info()` will
 emit a log message to the syslog. (You can find the syslog in the
 file `/var/log/messages` on many Linux distros and in the file
-`/var/log/system.log` on OS X.
+`/var/log/system.log` on OS X.)
+
+The idea behind this is *not* that `error.log` or the syslog are great
+places to log to, but rather they are *acceptable* places to log to as
+a fallback, when it is too early in a daemon's life to have anything
+more durable or structured to use.
 
 
 Lockfile Details
@@ -115,3 +152,21 @@ Using Upstart
 
 The file `upstart.conf` in the example directory is a simple example
 of how one might hook up a service that uses Daemon Sauce.
+
+
+Author
+------
+
+[Dan Bornstein](https://github.com/danfuzz)
+([personal website](http://www.milk.com/)), supported by
+[The Obvious Corporation](http://obvious.com/).
+
+
+License
+-------
+
+Copyright 2012 [The Obvious Corporation](http://obvious.com/).
+
+Licensed under the Apache License, Version 2.0. 
+See the top-level file `LICENSE.txt` and
+(http://www.apache.org/licenses/LICENSE-2.0).
