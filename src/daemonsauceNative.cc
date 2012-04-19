@@ -33,6 +33,40 @@ Handle<Value> CloseStderr(const Arguments& args) {
     freopen(DEV_NULL, "w", stderr);
 }
 
+Handle<Value> ReopenStdout(const Arguments& args) {
+    HandleScope scope;
+
+    Local<String> name = args[0]->ToString();
+    if (name.IsEmpty()) {
+        return scheduleException("Not a string.");
+    }
+
+    String::Utf8Value data(name);
+
+    if (freopen(*data, "w", stdout) == NULL) {
+        return scheduleException("Failed to reopen stdout.");
+    }
+
+    return Undefined();
+}
+
+Handle<Value> ReopenStderr(const Arguments& args) {
+    HandleScope scope;
+
+    Local<String> name = args[0]->ToString();
+    if (name.IsEmpty()) {
+        return scheduleException("Not a string.");
+    }
+
+    String::Utf8Value data(name);
+
+    if (freopen(*data, "w", stderr) == NULL) {
+        return scheduleException("Failed to reopen stderr.");
+    }
+
+    return Undefined();
+}
+
 /**
  * This is adapted from the daemon.node module:
  * 
@@ -57,7 +91,7 @@ Handle<Value> AcquireLock(const Arguments& args) {
     }
 
     if (lockf(lockFd, F_TLOCK, 0) < 0) {
-        return scope.Close(Boolean::New(false));
+        return False();
     }
 
     char *pidStr;
@@ -72,7 +106,7 @@ Handle<Value> AcquireLock(const Arguments& args) {
     write(lockFd, pidStr, pidLen);
     fsync(lockFd);
   
-    return scope.Close(Boolean::New(true));
+    return True();
 }
 
 void init(Handle<Object> target) {
@@ -82,6 +116,10 @@ void init(Handle<Object> target) {
                 FunctionTemplate::New(CloseStdout)->GetFunction());
     target->Set(String::NewSymbol("closeStderr"),
                 FunctionTemplate::New(CloseStderr)->GetFunction());
+    target->Set(String::NewSymbol("reopenStdout"),
+                FunctionTemplate::New(ReopenStdout)->GetFunction());
+    target->Set(String::NewSymbol("reopenStderr"),
+                FunctionTemplate::New(ReopenStderr)->GetFunction());
     target->Set(String::NewSymbol("acquireLock"),
                 FunctionTemplate::New(AcquireLock)->GetFunction());
 }
