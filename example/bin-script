@@ -120,24 +120,22 @@ var daemonsauce = require(path.join(codeDir, "node_modules", "daemonsauce"));
 // is to be the daemon parent.
 daemonsauce.basicSetup();
 
-// This is the last opportunity to run something as the root user. If the
-// program specified a "rootMain" now's when it gets to run.
-
-if (rootMain) {
-    require(path.join(codeDir, rootMain));   
-}
-
 // Do the remainder of the daemon setup.
 
+if (rootMain) {
+    rootMain = path.join(codeDir, rootMain);
+}
+
 var info = {
-    name:    productName,
-    version: productVersion,
-    user:    daemonUser,
-    group:   daemonGroup,
-    baseDir: baseDir,
-    dataDir: dataDir,
-    logDir:  logDir,
-    runDir:  runDir
+    name:     productName,
+    version:  productVersion,
+    user:     daemonUser,
+    group:    daemonGroup,
+    baseDir:  baseDir,
+    dataDir:  dataDir,
+    logDir:   logDir,
+    runDir:   runDir,
+    rootMain: rootMain
 };
 
 daemonsauce.usualSetup(info);
