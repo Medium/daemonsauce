@@ -143,7 +143,7 @@ var info = {
 daemonsauce.usualSetup(info);
 
 // Announce
-console.log("Running service: %s v%s", productName, productVersion);
+console.log("Running daemon: %s v%s", productName, productVersion);
 console.log("Base directory: %s", baseDir);
 console.log("Data directory: %s", dataDir);
 console.log("Log directory: %s", logDir);
