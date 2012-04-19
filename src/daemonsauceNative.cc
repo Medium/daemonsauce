@@ -54,8 +54,9 @@ Handle<Value> ReopenStdout(const Arguments& args) {
         return scheduleException("Failed to reopen stdout.");
     }
 
+    syslog(LOG_NOTICE, "~~~ yay1! hrm %m %s", *data);
     fprintf(stdout, "~~~ what is happening?");
-    syslog(LOG_NOTICE, "~~~ yay! hrm %s", *data);
+    syslog(LOG_NOTICE, "~~~ yay2! hrm %m %s", *data);
 
     return Undefined();
 }
