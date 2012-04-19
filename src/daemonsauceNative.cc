@@ -43,7 +43,7 @@ Handle<Value> ReopenStdout(const Arguments& args) {
 
     String::Utf8Value data(name);
 
-    if (freopen(*data, "w", stdout) == NULL) {
+    if (freopen(*data, "a", stdout) == NULL) {
         return scheduleException("Failed to reopen stdout.");
     }
 
@@ -60,7 +60,7 @@ Handle<Value> ReopenStderr(const Arguments& args) {
 
     String::Utf8Value data(name);
 
-    if (freopen(*data, "w", stderr) == NULL) {
+    if (freopen(*data, "a", stderr) == NULL) {
         return scheduleException("Failed to reopen stderr.");
     }
 
