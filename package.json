@@ -1,7 +1,7 @@
 {
     "name": "daemonsauce",
     "version": "0.3.3",
-    "description": "Just add Daemon Sauce to make turn your app into a daemon.",
+    "description": "Just add Daemon Sauce to turn your app into a daemon.",
     "keywords": ["daemon", "init", "upstart", "setuid", "setgid", "lock"],
     "author": {
         "name": "Dan Bornstein",
