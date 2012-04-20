@@ -127,8 +127,8 @@ The idea behind this is *not* that `error.log` or the syslog are great
 places to log to, but rather they are *acceptable* places to log to as
 a fallback, when it is too early in a daemon's life to have anything
 more durable or structured to use. It is also the case that Node (in
-0.6.*, as of this writing) will always write an "uncaught exception"
-message to the underlying stderr stream, as the process is dying. At
+0.6.*, as of this writing) will always write "uncaught exception"
+messages to the underlying stderr stream, as the process is dying. At
 least `error.log` is a place where these messages can be found, when
 doing forensics.
 
