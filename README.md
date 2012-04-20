@@ -154,6 +154,23 @@ The file `upstart.conf` in the example directory is a simple example
 of how one might hook up a service that uses Daemon Sauce.
 
 
+To Do
+-----
+
+* The `error.log` file should be rotated automatically.
+
+
+Contributing
+------------
+
+Questions, comments, bug reports, and pull requests are all welcome.
+Submit them at [the project on GitHub](https://github.com/Obvious/daemonsauce/).
+
+Bug reports that include steps-to-reproduce (including code) are the
+best. Even better, make them in the form of pull requests that add
+tests (which, yes, is a hard nut to crack in this case). Thanks!
+
+
 Author
 ------
 
