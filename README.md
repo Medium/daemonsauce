@@ -32,9 +32,10 @@ Testing
 
 It is unfortunately not easy to put together a generic automated test
 for the functionality in this module, such that it can be expected to
-work in the wide range of environments in which it is potentially
-deployed. In practice, this module has been tested by a lot of trial
-and error, along with a fair amount of one-off poking and prodding.
+work in (that is, to successfully test) the wide range of environments
+in which it is potentially deployed. In practice, this module has been
+tested by a lot of trial and error, along with a fair amount of
+one-off poking and prodding.
 
 The author would love some input (where "input" means "Pull requests,
 please!") on how to remedy this situation.
