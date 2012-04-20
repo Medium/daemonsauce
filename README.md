@@ -148,7 +148,8 @@ running at any given time.
 In this case, the lockfile is named `product-name.pid` and placed in
 the specified run directory. During startup, if it turns out that
 another process has locked the lockfile (this uses the POSIX call
-`lockf()`), this will cause the new process to exit.
+`lockf()`), this will cause the new process to exit after writing a
+message to that effect to the syslog.
 
 If the lock is successful, then the "winning" process writes out its
 process id to the lockfile, which makes it convenient to inspect,
