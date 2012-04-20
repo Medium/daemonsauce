@@ -8,7 +8,6 @@
         "email": "danfuzz@milk.com",
         "url": "http://www.milk.com/"
     },
-    "private": true,
 
     "main": "lib/index.js",
 	
