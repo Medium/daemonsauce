@@ -2,3 +2,4 @@
 .waf*
 build
 daemonsauceNative.node
+node_modules
