@@ -104,6 +104,8 @@ Handle<Value> AcquireLock(const Arguments& args) {
     }
 
     write(lockFd, pidStr, pidLen);
+    free(pidStr);
+
     ftruncate(lockFd, pidLen);
     fsync(lockFd);
   
