@@ -64,15 +64,18 @@ If you do this, then the script will take care of all the forking and
 setting of userids, and so on. It keys off of a few additional
 properties that can be defined in your `package.json` file:
 
-* rootMain -- If you define this to a file name (relative to the application
-  directory), then it will be loaded and run (via `require()`) as the
-  root userid (assuming the app started out running as root), just before
-  the wrapper script calls into Daemon Sauce to drop privileges.
+* rootMain -- If you define this to to be a file name (relative to the
+  application directory), then it will be loaded and run (via
+  `require()`) as the root userid (assuming the app started out
+  running as root), just before Daemon Sauce drop privileges.
+
 * daemonUser -- Use this to specify the userid (by name) to run the main
   application as. If unset, it defaults to the product name (`name` in
   the `package.json` file.)
+
 * daemonGroup -- Use this to specify the groupid (by name) to run the main
-  application as. If unset, it defaults to the userid.
+  application as. If unset, it defaults to the userid (which may itself
+  just be the default of the product name).
 
 If you want to make life hard on yourself, there are also separate
 methods to handle most of the various bits and pieces. UTSL for
