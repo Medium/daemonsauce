@@ -1,8 +1,10 @@
 {
     "name": "daemonsauce",
-    "version": "0.3.7",
+    "version": "0.3.8",
     "description": "Just add Daemon Sauce to turn your app into a daemon.",
-    "keywords": ["daemon", "init", "upstart", "setuid", "setgid", "lock"],
+    "keywords": [
+        "daemon", "init", "upstart", "setuid", "setgid", "lock", "log"
+    ],
     "homepage": "https://github.com/Obvious/daemonsauce",
     "repository": {
         "type": "git",

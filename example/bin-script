@@ -49,14 +49,14 @@ var dataDir;
 
 if (baseDir.search(/^\/usr\//) === 0) {
     // System installation.
-    dataDir = "/var/" + baseDir.slice(5);
+    dataDir = path.join("/var", baseDir.slice(5));
 } else {
     // Local installation.
-    dataDir = baseDir + "/data";
+    dataDir = path.join(baseDir, "data");
 }
 
 /** the log directory */
-var logDir = dataDir;
+var logDir = path.join(dataDir, "log");
 
 /** the run (process id / lock file) directory */
 var runDir = dataDir;
