@@ -126,14 +126,19 @@ emit a log message to the syslog. (You can find the syslog in the
 file `/var/log/messages` on many Linux distros and in the file
 `/var/log/system.log` on OS X.)
 
-The idea behind this is *not* that `error.log` or the syslog are great
-places to log to, but rather they are *acceptable* places to log to as
-a fallback, when it is too early in a daemon's life to have anything
-more durable or structured to use. It is also the case that Node (in
-0.6.*, as of this writing) will always write "uncaught exception"
-messages to the underlying stderr stream, as the process is dying. At
-least `error.log` is a place where these messages can be found, when
-doing forensics.
+Daemon Sauce also arranges to rotate the `error.log` file once a day
+(at around midnight UTC), renaming the file based on the date that it
+covered, and recreating / reopening the "plain" `error.log` to cover
+the upcoming day.
+
+The idea behind all this is *not* that `error.log` or the syslog are
+great places to log to, but rather they are *acceptable* places to log
+to as a fallback, when it is too early in a daemon's life to have
+anything more durable or structured to use. It is also the case that
+Node (in 0.6.*, as of this writing) will always write "uncaught
+exception" messages to the underlying stderr stream, as the process is
+dying. At least `error.log` is a place where these messages can be
+found, when doing forensics.
 
 
 Lockfile Details
@@ -166,7 +171,7 @@ of how one might hook up a service that uses Daemon Sauce.
 To Do
 -----
 
-* The `error.log` file should be rotated automatically.
+* `logToFile()` should prepend a timestamp to each line.
 
 
 Contributing
