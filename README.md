@@ -171,7 +171,7 @@ of how one might hook up a service that uses Daemon Sauce.
 To Do
 -----
 
-* `logToFile()` should prepend a timestamp to each line.
+* Find something to do!
 
 
 Contributing
