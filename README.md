@@ -1,3 +1,4 @@
+[![build status](https://secure.travis-ci.org/Obvious/daemonsauce.png)](http://travis-ci.org/Obvious/daemonsauce)
 Daemon Sauce
 ============
 
