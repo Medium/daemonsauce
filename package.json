@@ -1,6 +1,6 @@
 {
     "name": "daemonsauce",
-    "version": "0.3.8",
+    "version": "0.3.9",
     "description": "Just add Daemon Sauce to turn your app into a daemon.",
     "keywords": [
         "daemon", "init", "upstart", "setuid", "setgid", "lock", "log"
