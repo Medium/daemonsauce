@@ -1,6 +1,6 @@
 {
     "name": "daemonsauce",
-    "version": "0.3.9",
+    "version": "0.3.10-alpha",
     "description": "Just add Daemon Sauce to turn your app into a daemon.",
     "keywords": [
         "daemon", "init", "upstart", "setuid", "setgid", "lock", "log"
@@ -26,16 +26,16 @@
     } ],
 
     "main": "lib/index.js",
-	
+
     "engine": {
         "node": ">=0.6.0"
     },
 
     "scripts": {
-        "install": "node-waf configure build"
+        "install": "node-gyp configure build"
     },
 
     "dependencies": {
-        "posix": "~0.0.7"
+        "posix": "~0.0.13"
     }
 }

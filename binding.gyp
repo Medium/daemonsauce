@@ -1,7 +1,7 @@
 {
   "targets": [
     {
-      "target_name": "bin/daemonsauceNative",
+      "target_name": "daemonsauceNative",
       "sources": [ "src/daemonsauceNative.cc" ]
     }
   ]
