@@ -1,41 +1,48 @@
 {
-    "name": "daemonsauce",
-    "version": "0.3.12-alpha",
-    "description": "Just add Daemon Sauce to turn your app into a daemon.",
-    "keywords": [
-        "daemon", "init", "upstart", "setuid", "setgid", "lock", "log"
-    ],
-    "homepage": "https://github.com/Obvious/daemonsauce",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/Obvious/daemonsauce.git"
-    },
-    "licenses": [ {
-        "type": "Apache 2.0",
-        "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
-    } ],
-    "author": {
-        "name": "Dan Bornstein",
-        "email": "danfuzz@milk.com",
-        "url": "http://www.milk.com/"
-    },
-    "maintainers": [ {
-        "name": "Dan Bornstein",
-        "email": "danfuzz@obvious.com",
-        "web": "http://www.milk.com/"
-    } ],
-
-    "main": "lib/index.js",
-
-    "engine": {
-        "node": ">=0.6.0"
-    },
-
-    "scripts": {
-        "install": "node-gyp configure build"
-    },
-
-    "dependencies": {
-        "posix": "~2.0.1"
+  "name": "daemonsauce",
+  "version": "0.3.12-alpha",
+  "description": "Just add Daemon Sauce to turn your app into a daemon.",
+  "keywords": [
+    "daemon",
+    "init",
+    "upstart",
+    "setuid",
+    "setgid",
+    "lock",
+    "log"
+  ],
+  "homepage": "https://github.com/Obvious/daemonsauce",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Obvious/daemonsauce.git"
+  },
+  "licenses": [
+    {
+      "type": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
     }
+  ],
+  "author": {
+    "name": "Dan Bornstein",
+    "email": "danfuzz@milk.com",
+    "url": "http://www.milk.com/"
+  },
+  "maintainers": [
+    {
+      "name": "Dan Bornstein",
+      "email": "danfuzz@obvious.com",
+      "web": "http://www.milk.com/"
+    }
+  ],
+  "main": "lib/index.js",
+  "engine": {
+    "node": ">=0.6.0"
+  },
+  "scripts": {
+    "install": "node-gyp configure build"
+  },
+  "dependencies": {
+    "nan": "^1.8.4",
+    "posix": "~2.0.1"
+  }
 }
