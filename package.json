@@ -37,7 +37,7 @@
     },
 
     "dependencies": {
-        "posix": "~0.0.13"
+        "posix": "~2.0.1"
     },
     "devDependencies": {
         "nodeunit": "0.9.1",
