@@ -1,6 +1,7 @@
 // Copyright 2012 The Obvious Corporation.
 
 #include <node.h>
+#include <nan.h>
 #include <v8.h>
 
 #include <fcntl.h>
@@ -12,72 +13,53 @@ using namespace v8;
 
 #define DEV_NULL "/dev/null"
 
-/**
- * Helper to schedule an exception with the given message and return
- * undefined.
- */
-static void scheduleException(const FunctionCallbackInfo<Value>& info, const char* message) {
-    Isolate* isolate = info.GetIsolate();
-    isolate->ThrowException(Exception::Error(String::NewFromUtf8(isolate, message)));
-    info.GetReturnValue().SetUndefined();
-}
-
-void CloseStdin(const FunctionCallbackInfo<Value>& info) {
+NAN_METHOD(CloseStdin) {
+    NanScope();
     freopen(DEV_NULL, "r", stdin);
 }
 
-void CloseStdout(const FunctionCallbackInfo<Value>& info) {
+NAN_METHOD(CloseStdout) {
+    NanScope();
     freopen(DEV_NULL, "w", stdout);
 }
 
-void CloseStderr(const FunctionCallbackInfo<Value>& info) {
+NAN_METHOD(CloseStderr) {
+    NanScope();
     freopen(DEV_NULL, "w", stderr);
 }
 
-void ReopenStdout(const FunctionCallbackInfo<Value>& info) {
+NAN_METHOD(ReopenStdout) {
+    NanScope();
 
-    if (!info[0]->IsString()) {
-        scheduleException(info, "Not a string.");
-        return;
-    }
-
-    Local<String> name = info[0]->ToString();
-    if (name->Length() < 1) {
-        scheduleException(info, "Not a string.");
-        return;
+    Local<String> name = args[0]->ToString();
+    if (!args[0]->IsString() || name.IsEmpty()) {
+        return NanThrowError("Not a string.");
     }
 
     String::Utf8Value data(name);
 
     if (freopen(*data, "a", stdout) == NULL) {
-        scheduleException(info, "Failed to reopen stdout.");
-        return;
+        return NanThrowError("Failed to reopen stdout.");
     }
 
-    info.GetReturnValue().SetUndefined();
+    NanReturnUndefined();
 }
 
-void ReopenStderr(const FunctionCallbackInfo<Value>& info) {
+NAN_METHOD(ReopenStderr) {
+    NanScope();
 
-    if (!info[0]->IsString()) {
-        scheduleException(info, "Not a string.");
-        return;
-    }
-
-    Local<String> name = info[0]->ToString();
-    if (name->Length() < 1) {
-        scheduleException(info, "Not a string.");
-        return;
+    Local<String> name = args[0]->ToString();
+    if (!args[0]->IsString() || name.IsEmpty()) {
+        return NanThrowError("Not a string.");
     }
 
     String::Utf8Value data(name);
 
     if (freopen(*data, "a", stderr) == NULL) {
-        scheduleException(info, "Failed to reopen stderr.");
-        return;
+        return NanThrowError("Failed to reopen stderr.");
     }
 
-    info.GetReturnValue().SetUndefined();
+    NanReturnUndefined();
 }
 
 /**
@@ -88,30 +70,23 @@ void ReopenStderr(const FunctionCallbackInfo<Value>& info) {
  * That code is licensed under the MIT License, but also this code isn't
  * just a straight copy anyway.
  */
-void AcquireLock(const FunctionCallbackInfo<Value>& info) {
+NAN_METHOD(AcquireLock) {
+    NanScope();
 
-    if (!info[0]->IsString()) {
-        scheduleException(info, "Not a string.");
-        return;
-    }
-
-    Local<String> name = info[0]->ToString();
-    if (name->Length() < 1) {
-        scheduleException(info, "Not a string.");
-        return;
+    Local<String> name = args[0]->ToString();
+    if (!args[0]->IsString() || name.IsEmpty()) {
+        return NanThrowError("Not a string.");
     }
 
     String::Utf8Value data(name);
 
     int lockFd = open(*data, O_RDWR | O_CREAT, 0640);
     if (lockFd < 0) {
-        scheduleException(info, "Failed to open lock file");
-        return;
+        return NanThrowError("Failed to open lock file");
     }
 
     if (lockf(lockFd, F_TLOCK, 0) < 0) {
-        info.GetReturnValue().Set(false);
-        return;
+        NanReturnValue(false);
     }
 
     char *pidStr;
@@ -120,8 +95,7 @@ void AcquireLock(const FunctionCallbackInfo<Value>& info) {
     if (pidLen < 0) {
         // This shouldn't happen, and is probably a sign of
         // catastrophic failure, but we'll attempt to deal.
-        scheduleException(info, "Failed make pid string");
-        return;
+        return NanThrowError("Failed make pid string");
     }
 
     write(lockFd, pidStr, pidLen);
@@ -130,16 +104,22 @@ void AcquireLock(const FunctionCallbackInfo<Value>& info) {
     ftruncate(lockFd, pidLen);
     fsync(lockFd);
 
-    info.GetReturnValue().Set(true);
+    NanReturnValue(true);
 }
 
-void initialise(Handle<Object> exports) {
-    NODE_SET_METHOD(exports, "closeStdin", CloseStdin);
-    NODE_SET_METHOD(exports, "closeStdout", CloseStdout);
-    NODE_SET_METHOD(exports, "closeStderr", CloseStderr);
-    NODE_SET_METHOD(exports, "reopenStdout", ReopenStdout);
-    NODE_SET_METHOD(exports, "reopenStderr", ReopenStderr);
-    NODE_SET_METHOD(exports, "acquireLock", AcquireLock);
+void init(Handle<Object> target) {
+    target->Set(NanNew<String>("closeStdin"),
+        NanNew<FunctionTemplate>(CloseStdin)->GetFunction());
+    target->Set(NanNew<String>("closeStdout"),
+        NanNew<FunctionTemplate>(CloseStdout)->GetFunction());
+    target->Set(NanNew<String>("closeStderr"),
+        NanNew<FunctionTemplate>(CloseStderr)->GetFunction());
+    target->Set(NanNew<String>("reopenStdout"),
+        NanNew<FunctionTemplate>(ReopenStdout)->GetFunction());
+    target->Set(NanNew<String>("reopenStderr"),
+        NanNew<FunctionTemplate>(ReopenStderr)->GetFunction());
+    target->Set(NanNew<String>("acquireLock"),
+        NanNew<FunctionTemplate>(AcquireLock)->GetFunction());
 }
 
-NODE_MODULE(daemonsauceNative, initialise)
+NODE_MODULE(daemonsauceNative, init)
