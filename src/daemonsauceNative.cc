@@ -1,6 +1,7 @@
 // Copyright 2012 The Obvious Corporation.
 
 #include <node.h>
+#include <nan.h>
 #include <v8.h>
 
 #include <fcntl.h>
@@ -12,87 +13,86 @@ using namespace v8;
 
 #define DEV_NULL "/dev/null"
 
-/**
- * Helper to schedule an exception with the given message and return
- * undefined.
- */
-static Handle<Value> scheduleException(const char* message) {
-    Local<Value> exception = Exception::Error(String::New(message));
-    ThrowException(exception);
-    return Undefined();
-}
-
-Handle<Value> CloseStdin(const Arguments& args) {
+NAN_METHOD(CloseStdin) {
+    NanScope();
     freopen(DEV_NULL, "r", stdin);
 }
 
-Handle<Value> CloseStdout(const Arguments& args) {
+NAN_METHOD(CloseStdout) {
+    NanScope();
     freopen(DEV_NULL, "w", stdout);
 }
 
-Handle<Value> CloseStderr(const Arguments& args) {
+NAN_METHOD(CloseStderr) {
+    NanScope();
     freopen(DEV_NULL, "w", stderr);
 }
 
-Handle<Value> ReopenStdout(const Arguments& args) {
-    HandleScope scope;
+NAN_METHOD(ReopenStdout) {
+    NanScope();
 
     Local<String> name = args[0]->ToString();
-    if (name.IsEmpty()) {
-        return scheduleException("Not a string.");
+    if (!args[0]->IsString() || name.IsEmpty()) {
+        NanThrowError("Not a string.");
+        NanReturnUndefined();
     }
 
     String::Utf8Value data(name);
 
     if (freopen(*data, "a", stdout) == NULL) {
-        return scheduleException("Failed to reopen stdout.");
+        NanThrowError("Failed to reopen stdout.");
+        NanReturnUndefined();
     }
 
-    return Undefined();
+    NanReturnUndefined();
 }
 
-Handle<Value> ReopenStderr(const Arguments& args) {
-    HandleScope scope;
+NAN_METHOD(ReopenStderr) {
+    NanScope();
 
     Local<String> name = args[0]->ToString();
-    if (name.IsEmpty()) {
-        return scheduleException("Not a string.");
+    if (!args[0]->IsString() || name.IsEmpty()) {
+        NanThrowError("Not a string.");
+        NanReturnUndefined();
     }
 
     String::Utf8Value data(name);
 
     if (freopen(*data, "a", stderr) == NULL) {
-        return scheduleException("Failed to reopen stderr.");
+        NanThrowError("Failed to reopen stderr.");
+        NanReturnUndefined();
     }
 
-    return Undefined();
+    NanReturnUndefined();
 }
 
 /**
  * This is adapted from the daemon.node module:
- * 
+ *
  *     https://github.com/indexzero/daemon.node
  *
  * That code is licensed under the MIT License, but also this code isn't
  * just a straight copy anyway.
  */
-Handle<Value> AcquireLock(const Arguments& args) {
-    HandleScope scope;
+NAN_METHOD(AcquireLock) {
+    NanScope();
 
     Local<String> name = args[0]->ToString();
-    if (name.IsEmpty()) {
-        return scheduleException("Not a string.");
+    if (!args[0]->IsString() || name.IsEmpty()) {
+        NanThrowError("Not a string.");
+        NanReturnUndefined();
     }
 
     String::Utf8Value data(name);
-  
+
     int lockFd = open(*data, O_RDWR | O_CREAT, 0640);
     if (lockFd < 0) {
-        return scheduleException("Failed to open lock file");
+        NanThrowError("Failed to open lock file");
+        NanReturnUndefined();
     }
 
     if (lockf(lockFd, F_TLOCK, 0) < 0) {
-        return False();
+        NanReturnValue(false);
     }
 
     char *pidStr;
@@ -101,7 +101,8 @@ Handle<Value> AcquireLock(const Arguments& args) {
     if (pidLen < 0) {
         // This shouldn't happen, and is probably a sign of
         // catastrophic failure, but we'll attempt to deal.
-        return scheduleException("Failed make pid string");
+        NanThrowError("Failed make pid string");
+        NanReturnUndefined();
     }
 
     write(lockFd, pidStr, pidLen);
@@ -109,23 +110,23 @@ Handle<Value> AcquireLock(const Arguments& args) {
 
     ftruncate(lockFd, pidLen);
     fsync(lockFd);
-  
-    return True();
+
+    NanReturnValue(true);
 }
 
 void init(Handle<Object> target) {
-    target->Set(String::NewSymbol("closeStdin"),
-                FunctionTemplate::New(CloseStdin)->GetFunction());
-    target->Set(String::NewSymbol("closeStdout"),
-                FunctionTemplate::New(CloseStdout)->GetFunction());
-    target->Set(String::NewSymbol("closeStderr"),
-                FunctionTemplate::New(CloseStderr)->GetFunction());
-    target->Set(String::NewSymbol("reopenStdout"),
-                FunctionTemplate::New(ReopenStdout)->GetFunction());
-    target->Set(String::NewSymbol("reopenStderr"),
-                FunctionTemplate::New(ReopenStderr)->GetFunction());
-    target->Set(String::NewSymbol("acquireLock"),
-                FunctionTemplate::New(AcquireLock)->GetFunction());
+    target->Set(NanNew<String>("closeStdin"),
+        NanNew<FunctionTemplate>(CloseStdin)->GetFunction());
+    target->Set(NanNew<String>("closeStdout"),
+        NanNew<FunctionTemplate>(CloseStdout)->GetFunction());
+    target->Set(NanNew<String>("closeStderr"),
+        NanNew<FunctionTemplate>(CloseStderr)->GetFunction());
+    target->Set(NanNew<String>("reopenStdout"),
+        NanNew<FunctionTemplate>(ReopenStdout)->GetFunction());
+    target->Set(NanNew<String>("reopenStderr"),
+        NanNew<FunctionTemplate>(ReopenStderr)->GetFunction());
+    target->Set(NanNew<String>("acquireLock"),
+        NanNew<FunctionTemplate>(AcquireLock)->GetFunction());
 }
 
 NODE_MODULE(daemonsauceNative, init)
