@@ -1,6 +1,8 @@
 Daemon Sauce
 ============
 
+[![Build Status](https://travis-ci.org/Medium/daemonsauce.svg)](https://travis-ci.org/Medium/daemonsauce)
+
 Just add Daemon Sauce to your Node project, to make it a proper *nix
 daemon. This is intended to help build daemons that play nice on machines
 with services managed by something like (traditional) init(8) or Upstart.
