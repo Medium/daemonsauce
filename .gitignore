@@ -3,3 +3,6 @@
 build
 daemonsauceNative.node
 node_modules
+test/fixtures/data
+test/fixtures/log
+test/fixtures/run
