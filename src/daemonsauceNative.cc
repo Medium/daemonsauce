@@ -14,18 +14,18 @@ using namespace v8;
 #define DEV_NULL "/dev/null"
 
 NAN_METHOD(CloseStdin) {
-    NanScope();
     freopen(DEV_NULL, "r", stdin);
+    NanReturnUndefined();
 }
 
 NAN_METHOD(CloseStdout) {
-    NanScope();
     freopen(DEV_NULL, "w", stdout);
+    NanReturnUndefined();
 }
 
 NAN_METHOD(CloseStderr) {
-    NanScope();
     freopen(DEV_NULL, "w", stderr);
+    NanReturnUndefined();
 }
 
 NAN_METHOD(ReopenStdout) {
